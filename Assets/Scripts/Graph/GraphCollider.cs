@@ -49,7 +49,13 @@ public class GraphCollider : MonoBehaviour
 
             foreach (Direction direction in Direction.GetAll<Direction>())
             {
-                Vector3Int positionToCheck = direction.To3dPos(normal);
+                if (direction == Direction.IDLE)
+                {
+                    continue;
+                }
+
+                Vector3Int dirVect = direction.To3dPos(normal);
+                Vector3Int positionToCheck = matrixCollider.position + dirVect;
 
                 MatrixCollider adjacentMatrixCollider = collisionMatrix.Get(positionToCheck);
                 if (adjacentMatrixCollider != null)

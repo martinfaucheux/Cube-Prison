@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class GraphNode : ScriptableObject
+public class GraphNode
 {
-    Vector3 normal;
-    Vector3 realWorldPosition;
+    public Vector3 normal { get; private set; }
+    public Vector3 realWorldPosition { get; private set; }
     Graph graph;
 
-    Dictionary<Direction, GraphNode> neighbors;
+    public Dictionary<Direction, GraphNode> neighbors
+    {
+        get; private set;
+    }
 
     public GraphNode(Vector3 normal, Vector3 realWorldPosition, Graph graph)
     {
