@@ -23,6 +23,8 @@ public class GraphColliderEditor : Editor
     {
         Transform transform = collider.transform;
 
+        Color orangeColor = new Color(255 / 255f, 153 / 255f, 51 / 255f);
+
         foreach (KeyValuePair<Vector3Int, GraphNode> nodeItem in collider.nodes)
         {
             Vector3Int normal = nodeItem.Key;
@@ -40,7 +42,6 @@ public class GraphColliderEditor : Editor
                 EventType.Repaint
             );
 
-            Handles.color = Color.white;
             foreach (KeyValuePair<Direction, GraphNode> neighborItem in node.neighbors)
             {
                 Direction direction = neighborItem.Key;
@@ -48,6 +49,7 @@ public class GraphColliderEditor : Editor
 
                 Vector3 dirVect = (adjacentNode.realWorldPosition - node.realWorldPosition);
 
+                Handles.color = (adjacentNode is VoidNode) ? orangeColor : Color.white;
                 Handles.ArrowHandleCap(
                     0,
                     arrowPosition,

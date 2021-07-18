@@ -8,14 +8,17 @@ public class CollisionGraph : MonoBehaviour
     public static CollisionGraph instance;
 
     Graph _graph = new Graph();
+    List<GraphCollider> colliders = new List<GraphCollider>();
+
+    public Dictionary<Vector3Int, GraphNode> voidNodes
+    {
+        get; private set;
+    } = new Dictionary<Vector3Int, GraphNode>();
 
     CollisionMatrix collisionMatrix
     {
         get { return CollisionMatrix.instance; }
     }
-
-    List<GraphCollider> colliders = new List<GraphCollider>();
-
 
     void Awake()
     {
@@ -40,6 +43,7 @@ public class CollisionGraph : MonoBehaviour
 
     private void BuildGraph()
     {
+        BuildVoidNodes();
         foreach (GraphCollider graphCollider in colliders)
         {
             graphCollider.BuildNodes();
@@ -57,7 +61,7 @@ public class CollisionGraph : MonoBehaviour
 
     public GraphNode AddNode(Vector3 normal, Vector3 position)
     {
-        return new GraphNode(normal, position, _graph);
+        return new BasicNode(normal, position, _graph);
     }
 
     public GraphVertex AddVertex(GraphNode headNode, GraphNode tailNode, Direction direction)
@@ -83,10 +87,20 @@ public class CollisionGraph : MonoBehaviour
                     return adjacentNode;
                 }
             }
-
             // if no node is found, check next position (-1 normal)
             nextPositionToCheck -= normal;
         }
-        return null;
+        // return corresponding void node if nothing is found
+        return voidNodes[normal];
+    }
+
+    private void BuildVoidNodes()
+    {
+        foreach (Vector3Int normal in VectorUtils.normals)
+        {
+            Vector3 position = -1000 * normal;
+            VoidNode newNode = new VoidNode(normal, position, _graph);
+            voidNodes[normal] = newNode;
+        }
     }
 }

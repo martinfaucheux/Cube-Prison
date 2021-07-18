@@ -29,7 +29,7 @@ public class GraphCollider : MonoBehaviour
 
     public void BuildNodes()
     {
-        foreach (Vector3Int normal in normals)
+        foreach (Vector3Int normal in VectorUtils.normals)
         {
             Vector3Int positionToCheck = matrixCollider.position + normal;
             MatrixCollider adjacentCollider = collisionMatrix.Get(positionToCheck);
@@ -63,7 +63,7 @@ public class GraphCollider : MonoBehaviour
 
     private GraphNode DiscoverAdjacentNode(GraphNode node, Direction direction)
     {
-        Vector3Int normal = VectorConverter.FloatToInt(node.normal);
+        Vector3Int normal = VectorUtils.FloatToInt(node.normal);
 
         Vector3Int dirVect = direction.To3dPos(normal);
         Vector3Int positionToCheck = matrixCollider.position + dirVect;
@@ -79,21 +79,4 @@ public class GraphCollider : MonoBehaviour
         }
         return null;
     }
-
-    public static Vector3Int[] normals
-    {
-        get
-        {
-            return new Vector3Int[]{
-                Vector3Int.up,
-                Vector3Int.down,
-                Vector3Int.left,
-                Vector3Int.right,
-                Vector3Int.forward,
-                Vector3Int.back,
-
-            };
-        }
-    }
-
 }
