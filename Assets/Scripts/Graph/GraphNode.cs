@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 
 [Serializable]
-public class GraphNode
+public class GraphNode : ScriptableObject
 {
     Vector3 normal;
     Vector3 realWorldPosition;
@@ -43,5 +43,35 @@ public class GraphNode
             return neighbors[direction];
         }
         return null;
+    }
+
+    public override string ToString()
+    {
+        string directionWord = "";
+        if (normal.x > 0)
+        {
+            directionWord = "FORWARD";
+        }
+        else if (normal.x < 0)
+        {
+            directionWord = "BACK";
+        }
+        else if (normal.y > 0)
+        {
+            directionWord = "UP";
+        }
+        else if (normal.y < 0)
+        {
+            directionWord = "DOWN";
+        }
+        else if (normal.z > 0)
+        {
+            directionWord = "LEFT";
+        }
+        else if (normal.z < 0)
+        {
+            directionWord = "RIGHT";
+        }
+        return directionWord + "(" + realWorldPosition.x + ", " + realWorldPosition.y + ", " + realWorldPosition.z + ")";
     }
 }

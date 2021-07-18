@@ -5,25 +5,30 @@ using UnityEngine;
 public class MatrixCollider : MonoBehaviour
 {
     public Vector3Int position;
-    public Vector3Int initPosition {get; private set;}
+    public Vector3Int initPosition { get; private set; }
 
-    private CollisionMatrix collisionMatrix{
+    private CollisionMatrix collisionMatrix
+    {
         get => CollisionMatrix.instance;
     }
 
-    public Vector3 realWorldPosition{
-        get{
+    public Vector3 realWorldPosition
+    {
+        get
+        {
             return collisionMatrix.ToRealPosition(position);
         }
     }
 
-    void Start() {
+    void Start()
+    {
         Register();
         SetThisPosition();
         initPosition = position;
     }
 
-    public bool IsValidDirection(Direction direction){
+    public bool IsValidDirection(Direction direction)
+    {
         Vector3Int positionToCheck = position + direction.To3dPos();
         MatrixCollider collider = collisionMatrix.Get(positionToCheck);
 
@@ -39,19 +44,22 @@ public class MatrixCollider : MonoBehaviour
         // );
     }
 
-    private void Register(){
+    private void Register()
+    {
         collisionMatrix.Register(this);
     }
 
 
-    public Vector3Int Move(Vector3Int targetPosition){
+    public Vector3Int Move(Vector3Int targetPosition)
+    {
         Vector3Int newPosition = collisionMatrix.Move(this, targetPosition);
         SetThisPosition();
         return newPosition;
     }
     public Vector3Int Move(Direction direction) => Move(position + direction.To3dPos());
 
-    private void SetThisPosition(){
+    private void SetThisPosition()
+    {
         position = collisionMatrix.GetPosition(this);
-    }    
+    }
 }
