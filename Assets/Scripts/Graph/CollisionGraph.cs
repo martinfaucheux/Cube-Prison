@@ -64,4 +64,29 @@ public class CollisionGraph : MonoBehaviour
     {
         return new GraphVertex(headNode, tailNode, direction, _graph);
     }
+
+    public GraphNode GetNearestNode(Vector3Int startMatrixPosition, Vector3Int normal)
+    {
+        Vector3Int nextPositionToCheck = startMatrixPosition;
+
+        while (!collisionMatrix.IsOutOfBound(nextPositionToCheck))
+        {
+            MatrixCollider nodeAtPosition = collisionMatrix.Get(nextPositionToCheck);
+            if (nodeAtPosition != null)
+            {
+                GraphCollider graphCollider = nodeAtPosition.GetComponent<GraphCollider>();
+
+                // for now, only check for nodes with the same normal
+                GraphNode adjacentNode = graphCollider.GetNode(normal);
+                if (adjacentNode != null)
+                {
+                    return adjacentNode;
+                }
+            }
+
+            // if no node is found, check next position (-1 normal)
+            nextPositionToCheck -= normal;
+        }
+        return null;
+    }
 }

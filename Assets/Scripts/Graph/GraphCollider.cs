@@ -68,19 +68,7 @@ public class GraphCollider : MonoBehaviour
         Vector3Int dirVect = direction.To3dPos(normal);
         Vector3Int positionToCheck = matrixCollider.position + dirVect;
 
-        MatrixCollider adjacentMatrixCollider = collisionMatrix.Get(positionToCheck);
-        if (adjacentMatrixCollider != null)
-        {
-            GraphCollider adjacentGraphCollider = adjacentMatrixCollider.GetComponent<GraphCollider>();
-
-            // for now, only check for nodes with the same normal
-            GraphNode adjacentNode = adjacentGraphCollider.GetNode(normal);
-            if (adjacentNode != null)
-            {
-                return adjacentNode;
-            }
-        }
-        return null;
+        return collisionGraph.GetNearestNode(positionToCheck, normal);
     }
 
     public GraphNode GetNode(Vector3Int normal)
