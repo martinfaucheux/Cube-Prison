@@ -69,12 +69,12 @@ public class Direction : Enumeration
         return new Vector3Int(vect2d.x, 0, vect2d.y);
     }
 
-    public Vector3Int To3dPos(Vector3Int normal)
+    public Vector3Int To3dPos(Vector3 normal)
     {
         Vector2Int vect2d = ToPos();
         Vector3 defaultVect = new Vector3Int(vect2d.x, 0, vect2d.y);
 
-        Quaternion rotation = Quaternion.FromToRotation(Vector3.up, normal);
+        Quaternion rotation = Quaternion.FromToRotation(Vector3.up, normal.normalized);
 
         return Vector3Int.FloorToInt(rotation * defaultVect + 0.5f * Vector3.one);
     }
