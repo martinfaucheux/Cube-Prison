@@ -6,7 +6,10 @@ public class GraphCollider : MonoBehaviour
 {
     MatrixCollider matrixCollider;
 
-    Dictionary<Vector3Int, GraphNode> _nodes = new Dictionary<Vector3Int, GraphNode>();
+    public Dictionary<Vector3Int, GraphNode> nodes
+    {
+        get; private set;
+    } = new Dictionary<Vector3Int, GraphNode>();
 
     CollisionMatrix collisionMatrix
     {
@@ -32,14 +35,14 @@ public class GraphCollider : MonoBehaviour
             MatrixCollider adjacentCollider = collisionMatrix.Get(positionToCheck);
             if (adjacentCollider == null)
             {
-                _nodes[normal] = collisionGraph.AddNode(normal, positionToCheck);
+                nodes[normal] = collisionGraph.AddNode(normal, positionToCheck);
             }
         }
     }
 
     public void BuildVertices()
     {
-        foreach (KeyValuePair<Vector3Int, GraphNode> item in _nodes)
+        foreach (KeyValuePair<Vector3Int, GraphNode> item in nodes)
         {
             Vector3Int normal = item.Key;
             GraphNode node = item.Value;
@@ -66,9 +69,9 @@ public class GraphCollider : MonoBehaviour
 
     public GraphNode GetNode(Vector3Int normal)
     {
-        if (_nodes.ContainsKey(normal))
+        if (nodes.ContainsKey(normal))
         {
-            return _nodes[normal];
+            return nodes[normal];
         }
         return null;
     }

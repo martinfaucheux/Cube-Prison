@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-[Serializable]
 public class GraphNode : ScriptableObject
 {
     Vector3 normal;
@@ -50,11 +49,11 @@ public class GraphNode : ScriptableObject
         string directionWord = "";
         if (normal.x > 0)
         {
-            directionWord = "FORWARD";
+            directionWord = "RIGHT";
         }
         else if (normal.x < 0)
         {
-            directionWord = "BACK";
+            directionWord = "LEFT";
         }
         else if (normal.y > 0)
         {
@@ -66,12 +65,12 @@ public class GraphNode : ScriptableObject
         }
         else if (normal.z > 0)
         {
-            directionWord = "LEFT";
+            directionWord = "FORWARD";
         }
         else if (normal.z < 0)
         {
-            directionWord = "RIGHT";
+            directionWord = "BACK";
         }
-        return directionWord + "(" + realWorldPosition.x + ", " + realWorldPosition.y + ", " + realWorldPosition.z + ")";
+        return directionWord + " (" + realWorldPosition.x + ", " + realWorldPosition.y + ", " + realWorldPosition.z + ")";
     }
 }
