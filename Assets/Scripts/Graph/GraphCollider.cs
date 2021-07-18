@@ -27,6 +27,10 @@ public class GraphCollider : MonoBehaviour
         collisionGraph.Register(this);
     }
 
+    # region generation
+
+    // used for generating the graph
+
     public void BuildNodes()
     {
         foreach (Vector3Int normal in VectorUtils.normals)
@@ -79,4 +83,6 @@ public class GraphCollider : MonoBehaviour
         }
         return null;
     }
+
+    # endregion
 }
