@@ -42,10 +42,11 @@ public class GraphColliderEditor : Editor
                 EventType.Repaint
             );
 
-            foreach (KeyValuePair<Direction, GraphNode> neighborItem in node.neighbors)
+            foreach (KeyValuePair<Direction, GraphVertex> vertexItem in node.vertices)
             {
-                Direction direction = neighborItem.Key;
-                GraphNode adjacentNode = neighborItem.Value;
+                Direction direction = vertexItem.Key;
+                GraphVertex vertex = vertexItem.Value;
+                GraphNode adjacentNode = vertex.tailNode;
 
                 Vector3 dirVect = (adjacentNode.realWorldPosition - node.realWorldPosition);
 

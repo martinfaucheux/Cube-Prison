@@ -9,40 +9,40 @@ public class GraphNode
     public Vector3 realWorldPosition { get; private set; }
     Graph graph;
 
-    public Dictionary<Direction, GraphNode> neighbors
+    public Dictionary<Direction, GraphVertex> vertices
     {
         get; private set;
-    }
+    } = new Dictionary<Direction, GraphVertex>();
 
     public GraphNode(Vector3 normal, Vector3 realWorldPosition, Graph graph)
     {
         this.normal = normal;
         this.realWorldPosition = realWorldPosition;
         this.graph = graph;
-        this.neighbors = new Dictionary<Direction, GraphNode>();
 
         graph.Register(this);
     }
 
-    public void AddNeighbor(GraphNode neighbor, Direction direction)
+    public void AddVertex(GraphVertex vertex)
     {
-        if (!neighbors.ContainsKey(direction))
+        Direction direction = vertex.direction;
+        if (!vertices.ContainsKey(direction))
         {
-            neighbors[direction] = neighbor;
+            vertices[direction] = vertex;
         }
         else
         {
             throw new System.Exception(
-                "Node " + this.ToString() + " has already a neighbor for direction " + direction.ToString()
+                "Node " + this.ToString() + " has already a vertex for direction " + direction.ToString()
             );
         }
     }
 
     public GraphNode GetNeighbor(Direction direction)
     {
-        if (neighbors.ContainsKey(direction))
+        if (vertices.ContainsKey(direction))
         {
-            return neighbors[direction];
+            return vertices[direction].tailNode;
         }
         return null;
     }

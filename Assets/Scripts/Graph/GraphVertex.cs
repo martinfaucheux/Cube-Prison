@@ -18,6 +18,6 @@ public class GraphVertex
         this.graph = graph;
 
         graph.Register(this);
-        headNode.AddNeighbor(tailNode, direction);
+        headNode.AddVertex(this);
     }
 }
