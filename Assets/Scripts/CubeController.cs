@@ -4,12 +4,11 @@ using UnityEngine;
 
 public class CubeController : MonoBehaviour
 {
-    private MovableCube _movableCube;
+    private MovableCube2 _movableCube;
 
     private void Start()
     {
-        _movableCube = GetComponent<MovableCube>();
-        _movableCube.Move(Direction.IDLE);
+        _movableCube = GetComponent<MovableCube2>();
     }
 
     void Update()

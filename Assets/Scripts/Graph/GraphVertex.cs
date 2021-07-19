@@ -20,4 +20,19 @@ public class GraphVertex
         graph.Register(this);
         headNode.AddVertex(this);
     }
+
+    public int GetFallUnits()
+    {
+        if (headNode.normal == tailNode.normal)
+            return Mathf.RoundToInt(Vector3.Dot(
+                headNode.realWorldPosition - tailNode.realWorldPosition,
+                headNode.normal
+            ));
+        return 0;
+    }
+
+    public bool IsFreeFall()
+    {
+        return tailNode is VoidNode;
+    }
 }

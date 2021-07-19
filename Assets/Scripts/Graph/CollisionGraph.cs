@@ -75,16 +75,18 @@ public class CollisionGraph : MonoBehaviour
 
         while (!collisionMatrix.IsOutOfBound(nextPositionToCheck))
         {
-            MatrixCollider nodeAtPosition = collisionMatrix.Get(nextPositionToCheck);
-            if (nodeAtPosition != null)
+            MatrixCollider matrixCollider = collisionMatrix.Get(nextPositionToCheck);
+            if (matrixCollider != null)
             {
-                GraphCollider graphCollider = nodeAtPosition.GetComponent<GraphCollider>();
-
-                // for now, only check for nodes with the same normal
-                GraphNode adjacentNode = graphCollider.GetNode(normal);
-                if (adjacentNode != null)
+                GraphCollider graphCollider = matrixCollider.GetComponent<GraphCollider>();
+                if (graphCollider != null)
                 {
-                    return adjacentNode;
+                    // for now, only check for nodes with the same normal
+                    GraphNode adjacentNode = graphCollider.GetNode(normal);
+                    if (adjacentNode != null)
+                    {
+                        return adjacentNode;
+                    }
                 }
             }
             // if no node is found, check next position (-1 normal)

@@ -9,6 +9,11 @@ public class GraphNode
     public Vector3 realWorldPosition { get; private set; }
     Graph graph;
 
+    public Vector3Int matrixPosition
+    {
+        get { return CollisionMatrix.instance.ToMatrixPosition(realWorldPosition); }
+    }
+
     public Dictionary<Direction, GraphVertex> vertices
     {
         get; private set;
@@ -38,11 +43,21 @@ public class GraphNode
         }
     }
 
-    public GraphNode GetNeighbor(Direction direction)
+    public GraphVertex GetVertex(Direction direction)
     {
         if (vertices.ContainsKey(direction))
         {
-            return vertices[direction].tailNode;
+            return vertices[direction];
+        }
+        return null;
+    }
+
+    public GraphNode GetNeighbor(Direction direction)
+    {
+        GraphVertex vertex = GetVertex(direction);
+        if (vertex != null)
+        {
+            return vertex.tailNode;
         }
         return null;
     }

@@ -70,18 +70,8 @@ public class CollisionMatrix : MonoBehaviour
 
     public Vector3Int Move(MatrixCollider collider, Vector3Int position)
     {
-        MatrixCollider floorCollider = GetFloor(position, collider);
-
-        if (floorCollider != null)
-        {
-            Vector3Int newPosition = floorCollider.position + Vector3Int.up;
-            _grid[newPosition] = collider;
-            return newPosition;
-        }
-
-        // this means the cube has fallen
-        _grid[collider.initPosition] = collider;
-        return Vector3Int.zero;
+        _grid[position] = collider;
+        return position;
     }
 
     private MatrixCollider GetFloor(Vector3Int startPosition, MatrixCollider ignoreCollider = null)

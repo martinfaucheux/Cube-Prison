@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class GraphEntity : MonoBehaviour
 {
-    GraphNode currentNode;
+    public GraphNode currentNode { get; private set; }
+
+    MatrixCollider matrixCollider;
 
     void Start()
     {
+        matrixCollider = GetComponent<MatrixCollider>();
         SetStartNode();
     }
 
@@ -18,13 +21,19 @@ public class GraphEntity : MonoBehaviour
         return (neighborNode != null);
     }
 
-    public void Move(Direction direction)
+    public GraphVertex Move(Direction direction)
     {
-        currentNode = currentNode.GetNeighbor(direction);
+        GraphVertex vertex = currentNode.GetVertex(direction);
+        currentNode = vertex.tailNode;
+
+        // mostly for debug
+        matrixCollider.Move(currentNode.matrixPosition);
+        return vertex;
     }
 
     private void SetStartNode()
     {
+        // TODO: this could actually be baked before runtime
         Vector3Int matrixPosition = CollisionMatrix.instance.ToMatrixPosition(transform.position);
         currentNode = CollisionGraph.instance.GetNearestNode(matrixPosition, Vector3Int.up);
     }
