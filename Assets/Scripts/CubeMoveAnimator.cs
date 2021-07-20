@@ -2,43 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MovableCube2 : MonoBehaviour
+public class CubeMoveAnimator : MonoBehaviour
 {
     [SerializeField] float moveDuration = 0.3f;
     [SerializeField] float fallDuration = 0.1f;
 
     [SerializeField] Transform cubeMeshTransform;
     [SerializeField] Transform bumpTransform;
-    private MatrixCollider matrixCollider;
-    private GraphEntity graphEntity;
-    private bool _isFreeFall = false;
-    private Vector3Int _iniMatrixPos;
+
+    private static int voidFallUnits = 10;
 
     public bool isMoving { get; private set; } = false;
 
-    private void Start()
+    public void AnimateMove(GraphVertex graphVertex)
     {
-        matrixCollider = GetComponent<MatrixCollider>();
-        graphEntity = GetComponent<GraphEntity>();
-        _iniMatrixPos = matrixCollider.position;
-        Move(Direction.IDLE);
-    }
+        Direction direction = graphVertex.direction;
 
-    public void Move(Direction direction)
-    {
-        // Debug.Log(matrixCollider.IsValidDirection(direction));
-        if (!isMoving && graphEntity.IsValidDirection(direction))
-        {
-            Vector3 initRealPosition = graphEntity.currentNode.realWorldPosition;
-            GraphVertex graphVertex = graphEntity.Move(direction);
-            Vector3 newPosition = graphEntity.currentNode.realWorldPosition;
+        Vector3 initRealPosition = graphVertex.headNode.realWorldPosition;
+        Vector3 newPosition = graphVertex.tailNode.realWorldPosition;
 
-            int fallUnits = graphVertex.IsFreeFall() ? 10 : graphVertex.GetFallUnits();
+        int fallUnits = IsFreeFall(graphVertex) ? voidFallUnits : GetFallUnits(graphVertex);
+        Vector3Int rollDisplacement = direction.To3dPos(graphVertex.tailNode.normal);
 
-            Vector3Int rollDisplacement = direction.To3dPos(graphEntity.currentNode.normal);
-
-            StartCoroutine(MoveCoroutine(rollDisplacement, fallUnits));
-        }
+        StartCoroutine(MoveCoroutine(rollDisplacement, fallUnits));
     }
 
     private IEnumerator MoveCoroutine(Vector3Int rollDisplacement, int fallUnits)
@@ -47,8 +33,6 @@ public class MovableCube2 : MonoBehaviour
         Vector3 initPosition = transform.position;
         Quaternion initRotation = transform.rotation;
 
-        // Vector2Int displacement2d = direction.ToPos();
-        // Vector3 rollDisplacement = new Vector3(displacement2d.x, 0f, displacement2d.y);
         Vector3 targetPosition = initPosition + rollDisplacement;
 
         Quaternion appliedRotation = Quaternion.FromToRotation(Vector3.up, rollDisplacement);
@@ -89,17 +73,32 @@ public class MovableCube2 : MonoBehaviour
         transform.position = fallenPosition;
         isMoving = false;
 
-        if (_isFreeFall)
-        {
-            ReInitialize();
-        }
+        // if (_isFreeFall)
+        // {
+        //     ReInitialize();
+        // }
     }
 
-    private void ReInitialize()
+    // private void ReInitialize()
+    // {
+    //     _isFreeFall = false;
+    //     transform.position = matrixCollider.realWorldPosition;
+    //     Move(Direction.IDLE); // check for fall
+    // }
+
+    public static int GetFallUnits(GraphVertex graphVertex)
     {
-        _isFreeFall = false;
-        transform.position = matrixCollider.realWorldPosition;
-        Move(Direction.IDLE); // check for fall
+        if (graphVertex.headNode.normal == graphVertex.tailNode.normal)
+            return Mathf.RoundToInt(Vector3.Dot(
+                graphVertex.headNode.realWorldPosition - graphVertex.tailNode.realWorldPosition,
+                graphVertex.headNode.normal
+            ));
+        return 0;
+    }
+
+    public static bool IsFreeFall(GraphVertex graphVertex)
+    {
+        return graphVertex.tailNode is VoidNode;
     }
 
 }

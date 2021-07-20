@@ -4,14 +4,29 @@ using UnityEngine;
 
 public class GraphEntity : MonoBehaviour
 {
-    public GraphNode currentNode { get; private set; }
+    public EventNode currentNode { get; private set; }
 
     MatrixCollider matrixCollider;
+    CubeMoveAnimator moveAnimator;
+
+    public bool isMoving
+    {
+        get
+        {
+            if (moveAnimator != null)
+            {
+                return moveAnimator.isMoving;
+            }
+            return false;
+        }
+    }
 
     void Start()
     {
+        moveAnimator = GetComponent<CubeMoveAnimator>();
         matrixCollider = GetComponent<MatrixCollider>();
         SetStartNode();
+        currentNode.OnEnter(this);
     }
 
     public bool IsValidDirection(Direction direction)
@@ -21,20 +36,21 @@ public class GraphEntity : MonoBehaviour
         return (neighborNode != null);
     }
 
-    public GraphVertex Move(Direction direction)
+    public void Move(Direction direction)
     {
-        GraphVertex vertex = currentNode.GetVertex(direction);
-        currentNode = vertex.tailNode;
+        GraphVertex graphVertex = currentNode.GetVertex(direction);
+        currentNode = (EventNode)graphVertex.tailNode;
 
         // mostly for debug
         matrixCollider.Move(currentNode.matrixPosition);
-        return vertex;
+
+        // animate movement in real world
+        moveAnimator?.AnimateMove(graphVertex);
     }
 
     private void SetStartNode()
     {
-        // TODO: this could actually be baked before runtime
-        Vector3Int matrixPosition = CollisionMatrix.instance.ToMatrixPosition(transform.position);
-        currentNode = CollisionGraph.instance.GetNearestNode(matrixPosition, Vector3Int.up);
+        // TODO: should be different if entity is not the player
+        currentNode = CollisionGraph.instance.startNode;
     }
 }

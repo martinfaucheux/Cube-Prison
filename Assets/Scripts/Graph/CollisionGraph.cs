@@ -15,6 +15,8 @@ public class CollisionGraph : MonoBehaviour
         get; private set;
     } = new Dictionary<Vector3Int, GraphNode>();
 
+    public StartNode startNode { get; private set; }
+
     CollisionMatrix collisionMatrix
     {
         get { return CollisionMatrix.instance; }
@@ -52,6 +54,7 @@ public class CollisionGraph : MonoBehaviour
         {
             graphCollider.BuildVertices();
         }
+        BuildStartNode();
     }
 
     public void Register(GraphCollider collider)
@@ -94,6 +97,25 @@ public class CollisionGraph : MonoBehaviour
         }
         // return corresponding void node if nothing is found
         return voidNodes[normal];
+    }
+
+    private void BuildStartNode()
+    {
+        // NOTE: this assumes the startNode is always different from any other node
+        GameObject playerGameObject = GameObject.FindGameObjectWithTag("Player");
+        MatrixCollider matrixCollider = playerGameObject.GetComponent<MatrixCollider>();
+        startNode = new StartNode(Vector3.up, matrixCollider.realWorldPosition, _graph);
+
+        // build vertex from start to first valid position
+        GraphNode startIdleNode = GetNearestNode(matrixCollider.position, Vector3Int.up);
+        new GraphVertex(startNode, startIdleNode, Direction.IDLE, _graph);
+
+        foreach (KeyValuePair<Vector3Int, GraphNode> pair in voidNodes)
+        {
+            GraphNode voidNode = pair.Value;
+            new GraphVertex(voidNode, startNode, Direction.IDLE, _graph);
+
+        }
     }
 
     private void BuildVoidNodes()

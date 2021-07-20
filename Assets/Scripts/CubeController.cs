@@ -4,22 +4,35 @@ using UnityEngine;
 
 public class CubeController : MonoBehaviour
 {
-    private MovableCube2 _movableCube;
+    [SerializeField] float minMoveCooldown = 0.3f;
+
+    private GraphEntity _graphEntity;
+
+    private float _lastMoveTime;
+
+    private bool canMove
+    {
+        get
+        {
+            return !_graphEntity.isMoving && (Time.time - _lastMoveTime) > minMoveCooldown;
+        }
+    }
 
     private void Start()
     {
-        _movableCube = GetComponent<MovableCube2>();
+        _graphEntity = GetComponent<GraphEntity>();
     }
 
     void Update()
     {
-        if (!_movableCube.isMoving)
+        if (!_graphEntity.isMoving)
         {
             Direction direction = GetInputDirection();
             if (direction != Direction.IDLE)
             {
-                _movableCube.Move(direction);
+                _graphEntity.Move(direction);
             }
+            _lastMoveTime = Time.time;
         }
     }
 
