@@ -62,9 +62,10 @@ public class CollisionGraph : MonoBehaviour
         colliders.Add(collider);
     }
 
-    public GraphNode AddNode(Vector3 normal, Vector3 position)
+    public GraphNode AddNode(Vector3 normal, Vector3Int matrixPosition)
     {
-        return new BasicNode(normal, position, _graph);
+        Vector3 realWorldPosition = collisionMatrix.ToRealPosition(matrixPosition);
+        return new BasicNode(normal, realWorldPosition, _graph);
     }
 
     public GraphVertex AddVertex(GraphNode headNode, GraphNode tailNode, Direction direction)
