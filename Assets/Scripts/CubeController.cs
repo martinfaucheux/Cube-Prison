@@ -30,7 +30,10 @@ public class CubeController : MonoBehaviour
             Direction direction = GetInputDirection();
             if (direction != Direction.IDLE)
             {
-                _graphEntity.Move(direction);
+                if (_graphEntity.IsValidDirection(direction))
+                {
+                    _graphEntity.Move(direction);
+                }
             }
             _lastMoveTime = Time.time;
         }

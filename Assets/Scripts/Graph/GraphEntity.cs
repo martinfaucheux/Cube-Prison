@@ -9,17 +9,7 @@ public class GraphEntity : MonoBehaviour
     MatrixCollider matrixCollider;
     CubeMoveAnimator moveAnimator;
 
-    public bool isMoving
-    {
-        get
-        {
-            if (moveAnimator != null)
-            {
-                return moveAnimator.isMoving;
-            }
-            return false;
-        }
-    }
+    public bool isMoving { get; private set; } = false;
 
     void Start()
     {
@@ -38,14 +28,25 @@ public class GraphEntity : MonoBehaviour
 
     public void Move(Direction direction)
     {
+        Debug.Log(gameObject.ToString() + " moves " + direction);
+        isMoving = true;
         GraphVertex graphVertex = currentNode.GetVertex(direction);
+        Debug.Log("current node " + currentNode);
+        Debug.Log("next node " + graphVertex.tailNode);
+        currentNode.OnExit(this);
         currentNode = (EventNode)graphVertex.tailNode;
 
         // mostly for debug
         matrixCollider.Move(currentNode.matrixPosition);
 
         // animate movement in real world
-        moveAnimator?.AnimateMove(graphVertex);
+        moveAnimator.AnimateMove(graphVertex);
+    }
+
+    public void EndMove()
+    {
+        isMoving = false;
+        currentNode.OnEnter(this);
     }
 
     private void SetStartNode()
