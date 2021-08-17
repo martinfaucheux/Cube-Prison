@@ -8,4 +8,9 @@ public class StartNode : EventNode
         base.OnEnter(graphEntity);
         graphEntity.Move(Direction.IDLE);
     }
+
+    public override string ToString()
+    {
+        return "START " + base.ToString();
+    }
 }

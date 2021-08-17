@@ -62,7 +62,7 @@ public class GraphNode
         return null;
     }
 
-    public override string ToString()
+    protected string GetNormalString()
     {
         string directionWord = "";
         if (normal.x > 0)
@@ -89,6 +89,11 @@ public class GraphNode
         {
             directionWord = "BACK";
         }
-        return directionWord + " (" + realWorldPosition.x + ", " + realWorldPosition.y + ", " + realWorldPosition.z + ")";
+        return directionWord;
+    }
+
+    public override string ToString()
+    {
+        return GetNormalString() + " (" + realWorldPosition.x + ", " + realWorldPosition.y + ", " + realWorldPosition.z + ")";
     }
 }

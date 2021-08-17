@@ -11,4 +11,9 @@ public class VoidNode : EventNode
         base.OnEnter(graphEntity);
         graphEntity.Move(Direction.IDLE);
     }
+
+    public override string ToString()
+    {
+        return GetNormalString() + " (VOID)";
+    }
 }
