@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-[Serializable]
 public class Graph
 {
     List<GraphNode> nodes = new List<GraphNode>();
