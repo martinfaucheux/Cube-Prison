@@ -72,6 +72,15 @@ public class GraphCollider : MonoBehaviour
         Vector3Int dirVect = direction.To3dPos(normal);
         Vector3Int positionToCheck = matrixCollider.position + dirVect;
 
+        // check that the node is not obstructed
+        Vector3Int obstructedPosition = positionToCheck + normal;
+        MatrixCollider adjacentCollider = collisionMatrix.Get(obstructedPosition);
+        if (adjacentCollider != null)
+        {
+            // in case the position is obstructed, return null
+            return null;
+        }
+
         return collisionGraph.GetNearestNode(positionToCheck, normal);
     }
 
