@@ -64,6 +64,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3678633a7bd8d6c44969bcd9ec29188b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  minMoveCooldown: 0.3
 --- !u!114 &4916085069685221494
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -86,7 +87,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4916085069685221493}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 684d050e8fc81134ab2fb01d28fa1c7b, type: 3}
+  m_Script: {fileID: 11500000, guid: 3744a1a0ee1f7b0498c3fb9d133ef8a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &4916085070230857552
