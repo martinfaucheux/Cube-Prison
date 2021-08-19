@@ -35,15 +35,10 @@ public abstract class GraphCollider : MonoBehaviour
 
     public abstract void BuildVertices();
 
-    protected GraphNode DiscoverAdjacentNode(GraphNode node, Direction direction)
+    protected GraphNode DiscoverAdjacentNode(Vector3Int normal, Vector3Int firstPositionToCheck)
     {
-        Vector3Int normal = VectorUtils.FloatToInt(node.normal);
-
-        Vector3Int dirVect = direction.To3dPos(normal);
-        Vector3Int positionToCheck = matrixCollider.position + dirVect;
-
         // check that the node is not obstructed
-        Vector3Int obstructedPosition = positionToCheck + normal;
+        Vector3Int obstructedPosition = firstPositionToCheck + normal;
         MatrixCollider adjacentCollider = collisionMatrix.Get(obstructedPosition);
         if (adjacentCollider != null)
         {
@@ -51,7 +46,15 @@ public abstract class GraphCollider : MonoBehaviour
             return null;
         }
 
-        return collisionGraph.GetNearestNode(positionToCheck, normal);
+        return collisionGraph.GetNearestNode(firstPositionToCheck, normal);
+    }
+
+    protected GraphNode DiscoverAdjacentNode(GraphNode node, Direction direction)
+    {
+        Vector3Int normal = VectorUtils.FloatToInt(node.normal);
+        Vector3Int dirVect = direction.To3dPos(normal);
+        Vector3Int firstPositionToCheck = matrixCollider.position + dirVect;
+        return DiscoverAdjacentNode(normal, firstPositionToCheck);
     }
 
     public GraphNode GetNode(Vector3Int normal)
