@@ -2,7 +2,7 @@ using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
 
-[CustomEditor(typeof(GraphCollider))]
+[CustomEditor(typeof(GraphCollider), true)]
 public class GraphColliderEditor : Editor
 {
     float size = 1f;
